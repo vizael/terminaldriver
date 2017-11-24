@@ -12,9 +12,6 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 import com.terminaldriver.tn5250j.TerminalDriver;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class HTMLBuilder {
 
 	List<HTMLLogInfo> infos = new ArrayList<HTMLLogInfo>();
@@ -44,16 +41,32 @@ public class HTMLBuilder {
 	}
 
 	public static class HTMLLogInfo {
-		@Getter
+
 		public final String screenHtml;
-		@Getter
+		public String getScreenHtml() {
+			return screenHtml;
+		}
+
 		public String logText;
-		@Getter
-		@Setter
+		public String getLogText() {
+			return logText;
+		}
+
 		public String testName;
 
-		@Getter
+		public String getTestName() {
+			return testName;
+		}
+
+		public void setTestName(String testName) {
+			this.testName = testName;
+		}
+
 		List<FieldInfo> fields = new ArrayList<FieldInfo>();
+
+		public List<FieldInfo> getFields() {
+			return fields;
+		}
 
 		public HTMLLogInfo(final String screenHtml, final String logText) {
 			super();

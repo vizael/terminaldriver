@@ -1,7 +1,5 @@
 package com.terminaldriver.tn5250j.annotation;
 
-import lombok.Getter;
-
 public enum ScreenAttribute {
 	
 	//https://www.ibm.com/support/knowledgecenter/ssw_i5_54/apis/dsm1f.htm
@@ -38,11 +36,17 @@ public enum ScreenAttribute {
 	PNK_UL_RI("=","Pink/Underscore/Reverse Image"),
 	BLU_UL(">","Blue/Underscore"),
 	ND_3F("?","Nondisplay");
-	@Getter
+
 	private String code;
-	@Getter
+	public String getCode() {
+		return code;
+	}
+
 	private String description;
-    private ScreenAttribute(final String code,final String desc){this.code = code; this.description=desc;}
+    public String getDescription() {
+		return description;
+	}
+	private ScreenAttribute(final String code,final String desc){this.code = code; this.description=desc;}
     public String getColor(){
     	if(code != null && !"Nondisplay".equals(description)){
     		if(description.contains("Reverse")){

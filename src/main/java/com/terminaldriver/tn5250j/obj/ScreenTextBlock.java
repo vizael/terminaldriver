@@ -3,8 +3,6 @@ package com.terminaldriver.tn5250j.obj;
 import com.terminaldriver.tn5250j.TerminalDriver;
 import com.terminaldriver.tn5250j.exceptions.FieldNotEditableException;
 
-import lombok.Getter;
-
 public class ScreenTextBlock extends ScreenElement {
 
 	final String value;
@@ -12,8 +10,12 @@ public class ScreenTextBlock extends ScreenElement {
 	final int startColumn;
 	final int length;
 	final String attr;
-	@Getter
+
 	final TerminalDriver driver;
+
+	public TerminalDriver getDriver() {
+		return driver;
+	}
 
 	public ScreenTextBlock(final TerminalDriver driver, final String value, final int startRow, final int startColumn,
 			final int length, final String attr) {

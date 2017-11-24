@@ -22,7 +22,14 @@ public class Find {
 		if (info.attribute() != ScreenAttribute.UNSET && !element.getAttr().equals(info.attribute().getCode())) {
 			return false;
 		}
-		return info.text().equals("") || info.text().trim().equals(element.getString().trim());
+		
+		// find complete string or pattern?
+		if (info.text().endsWith("*")) {
+			String startPattern = info.text().substring(0, info.text().length() -1);
+			return info.text().equals("") || element.getString().trim().startsWith(startPattern);
+		} else {
+			return info.text().equals("") || info.text().trim().equals(element.getString().trim());
+		}
 	}
 
 	public static String toString(final FindBy findBy) {

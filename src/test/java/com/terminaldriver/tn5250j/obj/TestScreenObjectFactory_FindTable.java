@@ -18,9 +18,6 @@ import com.terminaldriver.tn5250j.annotation.FindBy;
 import com.terminaldriver.tn5250j.annotation.Table;
 import com.terminaldriver.tn5250j.mock.MockScreenUtil;
 
-import lombok.Data;
-
-
 public class TestScreenObjectFactory_FindTable {
 	TerminalDriver driver;
 	ScreenElement currentScreenField;
@@ -54,7 +51,6 @@ public class TestScreenObjectFactory_FindTable {
 	}
 
 	
-	@Data
 	public static class WorkListItem{
 		
 		@FindBy

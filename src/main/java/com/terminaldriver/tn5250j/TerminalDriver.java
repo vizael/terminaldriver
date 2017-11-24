@@ -7,15 +7,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.tn5250j.Session5250;
+import org.tn5250j.TN5250jConstants;
 import org.tn5250j.event.ScreenListener;
 import org.tn5250j.event.ScreenOIAListener;
 import org.tn5250j.event.SessionChangeEvent;
 import org.tn5250j.event.SessionListener;
 import org.tn5250j.framework.common.SessionManager;
 import org.tn5250j.framework.tn5250.ScreenOIA;
+import org.tn5250j.tools.logging.TN5250jLogFactory;
+import org.tn5250j.tools.logging.TN5250jLogger;
 
 import com.terminaldriver.common.TerminalDriverChangeListener;
 import com.terminaldriver.tn5250j.annotation.ScreenAttribute;
@@ -28,26 +32,51 @@ import com.terminaldriver.tn5250j.obj.ScreenTextBlock;
 import com.terminaldriver.tn5250j.util.ScreenFieldReader;
 import com.terminaldriver.tn5250j.util.ScreenUtils;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class TerminalDriver implements Closeable {
 
-	@Getter
-	@Setter
 	String codePage = "37";
 
-	@Getter
+	public String getCodePage() {
+		return codePage;
+	}
+
+	public void setCodePage(String codePage) {
+		this.codePage = codePage;
+	}
+
+	String sslType;
+	
+	public String getSslType() {
+		return sslType;
+	}
+
+	public void setSslType(String sslType) {
+		this.sslType = sslType;
+	}
+
 	Session5250 session;
 
-	@Getter
+	public Session5250 getSession() {
+		return session;
+	}
+
 	String host;
 
-	@Getter
+	public String getHost() {
+		return host;
+	}
+
 	int port;
 
-	@Getter
+	public int getPort() {
+		return port;
+	}
+
 	KeyStrokes keys = new KeyStrokes(this);
+
+	public KeyStrokes getKeys() {
+		return keys;
+	}
 
 	final TerminalDriverSessionListener driverSessionListener = new TerminalDriverSessionListener();
 	final TerminalDriverScreenListener driverScreenListener = new TerminalDriverScreenListener();
@@ -59,12 +88,37 @@ public class TerminalDriver implements Closeable {
 		super();
 	}
 
+	/**
+	 * Connect with default configuration.
+	 * @param host
+	 * @param port
+	 */
 	public void connectTo(final String host, final int port) {
 		this.host = host;
 		this.port = port;
 		createConn(host, port);
 	}
 
+	/**
+	 * Connect with given configuration.
+	 * @param aHost
+	 * @param aPort
+	 * @param someConfigs
+	 */
+	public void connectTo(final String aHost, final int aPort, final Map<String, Object> someConfigs) {
+		this.host = aHost;
+		this.port = aPort;
+		
+		if (someConfigs.containsKey("codePage")) {
+			this.codePage = (String)someConfigs.get("codePage");
+		}
+		
+		if (someConfigs.containsKey("SSL_TYPE")) {
+			this.sslType = (String)someConfigs.get("SSL_TYPE");
+		}
+		createConn(this.host, this.port);
+	}
+	
 	public String getScreenText() {
 		return new String(session.getScreen().getCharacters());
 	}
@@ -84,6 +138,10 @@ public class TerminalDriver implements Closeable {
 	public void dumpScreen() {
 		session.getScreen().dumpScreen();
 	}
+	
+	public String getDumpScreen() {
+		return session.getScreen().getDumpScreen();
+	}
 
 	public void sendKeys(final String keys) {
 		fireSendKeys(keys);
@@ -95,9 +153,11 @@ public class TerminalDriver implements Closeable {
 		sessionProperties.put("SESSION_HOST", host);
 		sessionProperties.put("SESSION_HOST_PORT", String.valueOf(port));
 		sessionProperties.put("SESSION_CODE_PAGE", codePage);
+		sessionProperties.put(TN5250jConstants.SSL_TYPE, TN5250jConstants.SSL_TYPE_SSLv3);
+
+		TN5250jLogFactory.setLogLevels(TN5250jLogger.INFO);
 
 		session = SessionManager.instance().openSession(sessionProperties, "", "");
-
 		session.addSessionListener(driverSessionListener);
 
 		session.getScreen().addScreenListener(driverScreenListener);
@@ -130,6 +190,7 @@ public class TerminalDriver implements Closeable {
 		session.addSessionListener(listener);
 	}
 
+	@Override
 	public void close() throws IOException {
 		session.disconnect();
 		for (final TerminalDriverChangeListener listener : listeners) {
@@ -336,21 +397,31 @@ public class TerminalDriver implements Closeable {
 
 	public class TerminalDriverScreenListener implements ScreenListener {
 
-		@Setter
 		boolean suppressFullScreenEmpty = true;
+
+		public void setSuppressFullScreenEmpty(boolean suppressFullScreenEmpty) {
+			this.suppressFullScreenEmpty = suppressFullScreenEmpty;
+		}
 
 		/**
 		 * Time in milliseconds of the last time the full screen was changed
 		 */
-		@Getter
 		long lastScreenChange;
+		public long getLastScreenChange() {
+			return lastScreenChange;
+		}
+
 		/**
 		 * Time in milliseconds of the last time the screen was partially
 		 * updated
 		 */
-		@Getter
 		long lastScreenUpdate;
 
+		public long getLastScreenUpdate() {
+			return lastScreenUpdate;
+		}
+
+		@Override
 		public void onScreenChanged(final int arg0, final int row1, final int col1, final int row2, final int col2) {
 
 			if (row1 == 0 && col1 == 0 && row2 >= 23 && col2 >= 79) {
@@ -375,6 +446,7 @@ public class TerminalDriver implements Closeable {
 			lastScreenUpdate = System.currentTimeMillis();
 		}
 
+		@Override
 		public void onScreenSizeChanged(final int cols, final int rows) {
 			fireScreenSizeChanged(cols, rows);
 		}
@@ -396,12 +468,14 @@ public class TerminalDriver implements Closeable {
 
 	public static class TerminalDriverSessionListener implements SessionListener {
 
+		@Override
 		public void onSessionChanged(final SessionChangeEvent arg0) {
 		}
 	}
 
 	public class TerminDriverScreenOIAListener implements ScreenOIAListener {
 
+		@Override
 		public void onOIAChanged(final ScreenOIA arg0, final int arg1) {
 			if(arg1==ScreenOIAListener.OIA_CHANGED_INPUTINHIBITED){
 				fireInputInhibited(arg0.getInputInhibited() != ScreenOIA.INPUTINHIBITED_NOTINHIBITED);
