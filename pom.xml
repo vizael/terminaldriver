@@ -1,31 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>com.terminaldriver.tn5250j</groupId>
 	<artifactId>terminaldriver-tn5250j</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>terminaldriver-tn5250j</name>
+	<description>terminal driver for 5250 telnet</description>
+	<inceptionYear>2016</inceptionYear>
+	
 	<url>http://maven.apache.org</url>
 
 	<!-- Allgemeingueltige Einstellungen -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<skip.unit.tests>false</skip.unit.tests>
+		<skip.integration.tests>true</skip.integration.tests>
+		<!-- overwrite in settings by profile -->
+		<skip.publish.githubio>true</skip.publish.githubio>
 	</properties>
 
 	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.10</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-				</configuration>
-			</plugin>
+			<!-- compile -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -35,13 +35,202 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- static code analysis -->
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
 				<version>3.4.0.905</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jdeps-plugin</artifactId>
+				<version>3.1.1</version>
+			</plugin>
+			<!-- unit testing -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.21.0</version>
+				<configuration>
+					<skipTests>${skip.unit.tests}</skipTests>
+					<!-- run all tests, tagged with categoy (UnitTests) -->
+					<groups>net.sf.f3270.UnitTests</groups>
+				</configuration>
+			</plugin>
+			<!-- integration testing -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>add-integration-test-sources</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/integration-test/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.21.0</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*.java</include>
+							</includes>
+							<skipTests>${skip.integration.tests}</skipTests>
+							<groups>net.sf.f3270.IntegrationTests</groups>
+							<systemPropertyVariables>
+								<host.client.path>${path.local.s3270}</host.client.path>
+								<host.app.user>${host.app.user}</host.app.user>
+								<host.app.password>${host.app.password}</host.app.password>
+							</systemPropertyVariables>
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- documentation -->
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.wagon</groupId>
+						<artifactId>wagon-webdav-jackrabbit</artifactId>
+						<version>3.0.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Generated site</message>
+					<path>${site.path}</path>
+					<merge>true</merge>
+					<server>github</server>
+					<dryRun>${skip.publish.githubio}</dryRun>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	<!-- reporting -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>com.soebes.maven.plugins</groupId>
+				<artifactId>doxygen-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<workingDirectory>${basedir}</workingDirectory>
+					<executable>${doxygen.executable.path}</executable>
+					<haveDot>true</haveDot>
+					<dotCleanup>true</dotCleanup>
+					<extractAll>true</extractAll>
+					<umlLook>true</umlLook>
+					<callGraph>true</callGraph>
+					<callerGraph>true</callerGraph>
+					<dotPath>${dot.executable.path}</dotPath>
+					<quiet>false</quiet>
+					<filePatterns>*.java</filePatterns>
+					<configurationFile>./doxygen.config</configurationFile>
+					<input>${doxygenInput}</input>
+					<recursive>true</recursive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.12.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>changes-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.2</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>analyze-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.9.0</version>
+				<configuration>
+					<skipEmptyReport>false</skipEmptyReport>
+					<includeTests>true</includeTests>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>cpd</report>
+							<report>pmd</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>summary</report>
+							<report>modules</report>
+							<report>license</report>
+							<report>project-team</report>
+							<report>scm</report>
+							<report>issue-tracking</report>
+							<report>dependency-management</report>
+							<report>dependencies</report>
+							<report>dependency-convergence</report>
+							<report>plugin-management</report>
+							<report>plugins</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<dependencies>
 		<dependency>
