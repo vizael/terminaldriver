@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.tn5250j.framework.tn5250.Screen5250;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,7 +51,7 @@ public class ScreenSerializer {
 					"isAttrOffset")) {
 				if (map.containsKey(col)) {
 					sb.append(" ").append(col).append("=\"")
-							.append(StringEscapeUtils.escapeXml(map.get(col).toString())).append("\"");
+							.append(StringEscapeUtils.escapeXml10(map.get(col).toString())).append("\"");
 				}
 			}
 			sb.append("/>\r\n");

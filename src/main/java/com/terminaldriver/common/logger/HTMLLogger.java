@@ -1,6 +1,6 @@
 package com.terminaldriver.common.logger;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.tn5250j.TN5250jConstants;
 import org.tn5250j.framework.tn5250.Screen5250;
 
@@ -89,7 +89,7 @@ public class HTMLLogger {
 						if (currentAttrEnum.isNonDisplay()) {
 							sb.append(" ");
 						} else {
-							sb.append(StringEscapeUtils.escapeHtml(String.valueOf(row.charAt(i))));
+							sb.append(StringEscapeUtils.escapeHtml4(String.valueOf(row.charAt(i))));
 						}
 					}
 				}
