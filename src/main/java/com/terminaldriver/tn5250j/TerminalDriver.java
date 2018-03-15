@@ -34,8 +34,31 @@ import com.terminaldriver.tn5250j.util.ScreenUtils;
 
 public class TerminalDriver implements Closeable {
 
+	/**
+	 * Host of the 5250 server.
+	 */
+	String host;
+	
+	/**
+	 * Port where the 5250 server is listening.
+	 */
+	int port;
+	
+	/**
+	 * Standard code page is &lt;37&gt;.
+	 */
 	String codePage = "37";
 
+	/**
+	 * SSL Type, no default.
+	 */
+	String sslType;
+
+	/**
+	 * 5250 session object
+	 */
+	Session5250 session;
+	
 	public String getCodePage() {
 		return codePage;
 	}
@@ -44,8 +67,6 @@ public class TerminalDriver implements Closeable {
 		this.codePage = codePage;
 	}
 
-	String sslType;
-	
 	public String getSslType() {
 		return sslType;
 	}
@@ -54,19 +75,13 @@ public class TerminalDriver implements Closeable {
 		this.sslType = sslType;
 	}
 
-	Session5250 session;
-
 	public Session5250 getSession() {
 		return session;
 	}
 
-	String host;
-
 	public String getHost() {
 		return host;
 	}
-
-	int port;
 
 	public int getPort() {
 		return port;
