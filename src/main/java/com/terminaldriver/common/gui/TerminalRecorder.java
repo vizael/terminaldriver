@@ -15,7 +15,6 @@ import javax.swing.JTextArea;
 
 import org.tn5250j.Session5250;
 import org.tn5250j.SessionPanel;
-import org.tn5250j.SessionPanel.TNRubberBand;
 import org.tn5250j.framework.tn5250.Rect;
 import org.tn5250j.framework.tn5250.Screen5250;
 
