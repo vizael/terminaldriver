@@ -37,8 +37,8 @@ public class UserCredentialsResource extends ExternalResource {
 	
 	/**
 	 * load credentials from file
-	 * @param anImportFile
-	 * @return
+	 * @param anImportFile a file to import
+	 * @return a resource object
 	 */
 	public UserCredentialsResource fromXML(String anImportFile) {
 		try {

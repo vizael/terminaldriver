@@ -93,8 +93,8 @@ public class HTMLBuilder {
 	/**
 	 * Auto combine two subsequent identical screens, unless verbose = true
 	 * 
-	 * @param info
-	 * @param verbose
+	 * @param info info to log
+	 * @param verbose flag
 	 */
 	public void addLog(final HTMLLogInfo info, final boolean verbose) {
 		if (!verbose && info != null && infos.size() > 0) {

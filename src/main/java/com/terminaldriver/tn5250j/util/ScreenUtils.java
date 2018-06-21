@@ -20,9 +20,9 @@ public class ScreenUtils {
 	 * Verifies that all the @FindBy annotations on the give page object are
 	 * present on the current screen.
 	 *
-	 * @param page
-	 * @param driver
-	 * @return
+	 * @param page actual page object
+	 * @param driver terminal driver object
+	 * @return flag
 	 */
 	public static boolean verifyScreen(final Object page, final TerminalDriver driver) {
 		return verifyScreen(page.getClass(), driver);
@@ -32,9 +32,9 @@ public class ScreenUtils {
 	 * Verifies that all the @FindBy annotations on the give page object class
 	 * are present on the current screen.
 	 *
-	 * @param clazz
-	 * @param driver
-	 * @return
+	 * @param clazz class
+	 * @param driver terminal driver object
+	 * @return flag
 	 */
 	public static boolean verifyScreen(final Class<?> clazz, final TerminalDriver driver) {
 		final FindBy result = ScreenUtils.checkScreen(clazz, driver);
@@ -45,8 +45,8 @@ public class ScreenUtils {
 	 * Checks that all the @FindBy annotations that identify the give page
 	 * object class are present on the current screen.
 	 *
-	 * @param clazz
-	 * @param driver
+	 * @param clazz class
+	 * @param driver terminal driver object
 	 * @return FindBy that does not match if any.
 	 */
 	public static FindBy checkScreen(final Class<?> clazz, final TerminalDriver driver) {
@@ -71,9 +71,9 @@ public class ScreenUtils {
 	/**
 	 * Verifies that the given @FindBy is found on the screen
 	 *
-	 * @param findBy
-	 * @param driver
-	 * @return
+	 * @param findBy findby, what we want to find
+	 * @param driver terminal driver object
+	 * @return flag
 	 */
 	public static boolean checkFindBy(final FindBy findBy, final TerminalDriver driver) {
 		final ScreenFieldReader reader = new ScreenFieldReader(driver);

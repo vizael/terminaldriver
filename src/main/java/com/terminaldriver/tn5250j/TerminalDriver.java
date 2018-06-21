@@ -105,8 +105,8 @@ public class TerminalDriver implements Closeable {
 
 	/**
 	 * Connect with default configuration.
-	 * @param host
-	 * @param port
+	 * @param host hostname
+	 * @param port the port we want to connect to
 	 */
 	public void connectTo(final String host, final int port) {
 		this.host = host;
@@ -116,9 +116,9 @@ public class TerminalDriver implements Closeable {
 
 	/**
 	 * Connect with given configuration.
-	 * @param aHost
-	 * @param aPort
-	 * @param someConfigs
+	 * @param aHost hostname
+	 * @param aPort port
+	 * @param someConfigs specification for some more configs, e.g. code page, ssl,..
 	 */
 	public void connectTo(final String aHost, final int aPort, final Map<String, Object> someConfigs) {
 		this.host = aHost;

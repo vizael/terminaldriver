@@ -62,8 +62,8 @@ public class TerminalResource extends ExternalResource {
 	/**
 	 * FluentInterface: Define host
 	 * 
-	 * @param aHost
-	 * @return
+	 * @param aHost hostname
+	 * @return TerminalResource object
 	 */
 	public TerminalResource withHost(String aHost) {
 		this.host = aHost;
@@ -72,8 +72,8 @@ public class TerminalResource extends ExternalResource {
 	
 	/**
 	 * FluentInterface: Define port
-	 * @param aPort
-	 * @return
+	 * @param aPort a port we want to connect to
+	 * @return TerminalResource object
 	 */
 	public TerminalResource withPort(int aPort) {
 		this.port = aPort;
@@ -82,8 +82,8 @@ public class TerminalResource extends ExternalResource {
 	
 	/**
 	 * FluentInterface: Define CodePage
-	 * @param aCodePage
-	 * @return
+	 * @param aCodePage the codepage for the connection
+	 * @return TerminalResource object
 	 */
 	public TerminalResource withCodePage(String aCodePage) {
 		this.codePage = aCodePage;
@@ -92,8 +92,8 @@ public class TerminalResource extends ExternalResource {
 	
 	/**
 	 * FluentInterface: Define SSL Type
-	 * @param aSSLType
-	 * @return
+	 * @param aSSLType the kind of ssl wen need
+	 * @return TerminalResource object
 	 */
 	public TerminalResource withSSLType(String aSSLType) {
 		this.sslType = aSSLType;
@@ -102,8 +102,8 @@ public class TerminalResource extends ExternalResource {
 	
 	/**
 	 * FluentInterface: Hold connection after TestCase. 
-	 * @param aDecision
-	 * @return
+	 * @param aDecision flag if the connection should be held after testcase finished
+	 * @return TerminalResource object
 	 */
 	public TerminalResource withReusableConnection(boolean aDecision) {
 		this.reusableConnection = aDecision;
@@ -161,7 +161,7 @@ public class TerminalResource extends ExternalResource {
 	/**
 	 * Get driver instance.
 	 * 
-	 * @return
+	 * @return TerminalDriver object
 	 */
 	public TerminalDriver getDriver() {
 		return this.driver;

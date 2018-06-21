@@ -32,8 +32,8 @@ public class SharedDataResource extends ExternalResource {
 	/**
 	 * Use shared data from xml source.
 	 * 
-	 * @param anImportFile
-	 * @return
+	 * @param anImportFile file to import, need to be an xml format
+	 * @return a ressource object
 	 */
 	public SharedDataResource fromXML(String anImportFile) {
 		importFile = new File(anImportFile);
