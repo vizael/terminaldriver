@@ -74,9 +74,6 @@ public class ScreenFieldReader implements TN5250jConstants {
 				return null;
 			}
 			final String content = new String(screenContainer.text).substring(startBuffer, endBuffer);
-//			final ScreenTextBlock retval = new ScreenTextBlock(driver, content, pos2row(startBuffer, cols),
-//					pos2col(startBuffer, cols), endBuffer - startBuffer,
-//					Character.valueOf(screenContainer.attr[startBuffer]).toString());
 			
 			final ScreenTextBlock retval = new ScreenTextBlock(driver, content, pos2row(startBuffer, cols),
 					pos2col(startBuffer, cols), endBuffer - startBuffer,
