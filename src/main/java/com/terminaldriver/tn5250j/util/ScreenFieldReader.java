@@ -65,6 +65,7 @@ public class ScreenFieldReader implements TN5250jConstants {
 			if (screenContainer.isAttr[getCurrentPosition()] == 1) {
 				advance();
 			}
+			
 			final int startBuffer = getCurrentPosition();
 			while (advance() && screenContainer.isAttr[getCurrentPosition()] != 1) {
 			}
@@ -73,9 +74,13 @@ public class ScreenFieldReader implements TN5250jConstants {
 				return null;
 			}
 			final String content = new String(screenContainer.text).substring(startBuffer, endBuffer);
+//			final ScreenTextBlock retval = new ScreenTextBlock(driver, content, pos2row(startBuffer, cols),
+//					pos2col(startBuffer, cols), endBuffer - startBuffer,
+//					Character.valueOf(screenContainer.attr[startBuffer]).toString());
+			
 			final ScreenTextBlock retval = new ScreenTextBlock(driver, content, pos2row(startBuffer, cols),
 					pos2col(startBuffer, cols), endBuffer - startBuffer,
-					Character.valueOf(screenContainer.attr[startBuffer]).toString());
+					Character.valueOf(screenContainer.attr[startBuffer]).toString(), screenContainer.attr[startBuffer], screenContainer.color[startBuffer]);			
 			return retval;
 		} catch (final ArrayIndexOutOfBoundsException e) {
 			if (currentRow > rows) {

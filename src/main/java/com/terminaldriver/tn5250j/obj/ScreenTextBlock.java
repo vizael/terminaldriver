@@ -10,12 +10,11 @@ public class ScreenTextBlock extends ScreenElement {
 	final int startColumn;
 	final int length;
 	final String attr;
+	
+	final char color;
+	final char attribute;
 
 	final TerminalDriver driver;
-
-	public TerminalDriver getDriver() {
-		return driver;
-	}
 
 	public ScreenTextBlock(final TerminalDriver driver, final String value, final int startRow, final int startColumn,
 			final int length, final String attr) {
@@ -26,8 +25,29 @@ public class ScreenTextBlock extends ScreenElement {
 		this.length = length;
 		this.attr = attr;
 		this.driver = driver;
+		
+		this.color = '\\';
+		this.attribute = '\\';
 	}
 
+	public ScreenTextBlock(final TerminalDriver driver, final String value, final int startRow, final int startColumn,
+			final int length, final String attr, final char attribute, final char color) {
+		super();
+		this.value = value;
+		this.startRow = startRow;
+		this.startColumn = startColumn;
+		this.length = length;
+		this.attr = attr;
+		this.driver = driver;
+		
+		this.color = color;
+		this.attribute = attribute;
+	}	
+	
+	public TerminalDriver getDriver() {
+		return driver;
+	}
+	
 	@Override
 	public String getString() {
 		return value;
@@ -71,5 +91,9 @@ public class ScreenTextBlock extends ScreenElement {
 	@Override
 	public boolean isEditable() {
 		return false;
+	}
+	
+	public char getAttribute() {
+		return this.attribute;
 	}
 }
