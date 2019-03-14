@@ -168,7 +168,7 @@ public class TerminalDriver implements Closeable {
 		sessionProperties.put("SESSION_HOST", host);
 		sessionProperties.put("SESSION_HOST_PORT", String.valueOf(port));
 		sessionProperties.put("SESSION_CODE_PAGE", codePage);
-		sessionProperties.put(TN5250jConstants.SSL_TYPE, TN5250jConstants.SSL_TYPE_SSLv3);
+		sessionProperties.put(TN5250jConstants.SSL_TYPE, sslType);
 
 		TN5250jLogFactory.setLogLevels(TN5250jLogger.INFO);
 
