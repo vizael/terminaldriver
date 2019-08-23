@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.tn5250j.Session5250;
+import org.tn5250j.TN5250jConstants;
 import org.tn5250j.event.ScreenListener;
 import org.tn5250j.event.ScreenOIAListener;
 import org.tn5250j.event.SessionChangeEvent;
@@ -95,6 +96,7 @@ public class TerminalDriver implements Closeable {
 		sessionProperties.put("SESSION_HOST", host);
 		sessionProperties.put("SESSION_HOST_PORT", String.valueOf(port));
 		sessionProperties.put("SESSION_CODE_PAGE", codePage);
+		sessionProperties.put(TN5250jConstants.SESSION_SCREEN_SIZE, TN5250jConstants.SCREEN_SIZE_27X132_STR);
 
 		session = SessionManager.instance().openSession(sessionProperties, "", "");
 
